@@ -9,30 +9,39 @@ import com.progressoft.clustereddatawarehouse.repository.FxDealRepository;
 import com.progressoft.clustereddatawarehouse.service.FxDealService;
 import com.progressoft.clustereddatawarehouse.service.FxDealValidationService;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.time.LocalDateTime;
 
 @RequiredArgsConstructor
 public class FxDealServiceImpl implements FxDealService {
 
+    private static final Logger log = LoggerFactory.getLogger(FxDealServiceImpl.class);
     private final FxDealRepository repository;
     private final FxDealValidationService validator;
     private final FxDealMapper mapper;
 
-    // TODO: dont forget logs
-
     @Override
-    public FxDealResponseDTO importDeal(FxDealCreateRequestDTO dealDto) {
+    public FxDealResponseDTO importDeal(final FxDealCreateRequestDTO dealDto) {
+        log.info("Starting import process for deal with ID: [{}] at [{}]", dealDto.id(), LocalDateTime.now());
+
         ensureDealIdIsUnique(dealDto.id());
         validator.validateCurrencies(dealDto.fromCurrency(), dealDto.toCurrency());
-        FxDeal fxDeal = mapper.mapToEntity(dealDto);
-        FxDeal savedFxDeal = repository.save(fxDeal);
+        final var fxDeal = mapper.mapToEntity(dealDto);
+        final var savedFxDeal = repository.save(fxDeal);
+
+        log.info("End the importing of the deal with ID: [{}] at [{}]", dealDto.id(), LocalDateTime.now());
+
         return mapper.mapToResponse(savedFxDeal);
     }
 
-    private void ensureDealIdIsUnique(String id) {
-        if(repository.existsById(id)) {
-           throw new BusinessViolationException(
-                   String.format("Deal with id [%s] already exists", id)
-           );
+    private void ensureDealIdIsUnique(final String id) {
+        if (repository.existsById(id)) {
+            log.warn("Duplicate deal ID detected: [{}]", id);
+            throw new BusinessViolationException(
+                    String.format("Deal with ID [%s] already exists", id)
+            );
         }
     }
 }

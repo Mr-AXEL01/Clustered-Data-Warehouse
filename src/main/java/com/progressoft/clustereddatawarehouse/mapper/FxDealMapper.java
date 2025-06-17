@@ -6,7 +6,7 @@ import com.progressoft.clustereddatawarehouse.dto.FxDealResponseDTO;
 
 public interface FxDealMapper {
 
-    FxDealResponseDTO mapToResponse(FxDeal deal);
+    FxDealResponseDTO mapToResponse(final FxDeal deal);
 
-    FxDeal mapToEntity(FxDealCreateRequestDTO request);
+    FxDeal mapToEntity(final FxDealCreateRequestDTO request);
 }

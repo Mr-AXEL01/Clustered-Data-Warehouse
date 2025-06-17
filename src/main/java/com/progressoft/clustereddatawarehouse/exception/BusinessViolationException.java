@@ -1,7 +1,7 @@
 package com.progressoft.clustereddatawarehouse.exception;
 
 public class BusinessViolationException extends RuntimeException {
-    public BusinessViolationException(String message) {
+    public BusinessViolationException(final String message) {
         super(message);
     }
 }
