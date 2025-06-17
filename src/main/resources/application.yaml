@@ -1,0 +1,21 @@
+spring:
+  application:
+    name: clustered-data-warehouse
+
+  docker:
+    compose:
+      lifecycle-management: start_only
+
+  jpa:
+    generate-ddl: true
+    hibernate:
+      ddl-auto: validate
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+
+  datasource:
+    url: jdbc:postgresql://postgres:5431/${POSTGRES_DB}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
