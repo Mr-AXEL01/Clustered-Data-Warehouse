@@ -6,7 +6,6 @@ import java.math.BigDecimal;
 import java.time.Instant;
 
 public record FxDealCreateRequestDTO(
-
         @NotBlank
         String id,
 
@@ -21,5 +20,6 @@ public record FxDealCreateRequestDTO(
 
         @NotNull @PastOrPresent
         Instant timestamp
+
 ) {
 }
