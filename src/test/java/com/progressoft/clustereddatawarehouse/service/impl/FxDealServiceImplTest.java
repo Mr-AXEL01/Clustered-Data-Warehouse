@@ -75,7 +75,7 @@ class FxDealServiceImplTest {
 
         assertThatThrownBy(() -> service.importDeal(createDTO))
                 .isInstanceOf(BusinessViolationException.class)
-                .hasMessageContaining("Deal with id [deal_1] already exists");
+                .hasMessageContaining("Deal with ID [deal_1] already exists");
 
         verify(repository).existsById(createDTO.id());
         verifyNoMoreInteractions(repository, validator, mapper);
