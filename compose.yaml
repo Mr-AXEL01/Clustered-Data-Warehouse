@@ -1,5 +1,21 @@
 version: '3.8'
 services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "9090:8081"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/${POSTGRES_DB}
+      SPRING_DATASOURCE_USERNAME: ${DB_USERNAME}
+      SPRING_DATASOURCE_PASSWORD: ${DB_PASSWORD}
+    depends_on:
+      - db
+    networks:
+      - app-network
+    restart: no
+
   db:
     image: 'postgres:16-alpine'
     environment:
@@ -8,3 +24,9 @@ services:
       - POSTGRES_USER=${DB_USERNAME}
     ports:
       - '5431:5432'
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
